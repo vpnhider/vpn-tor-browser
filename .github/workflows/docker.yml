@@ -48,6 +48,7 @@ jobs:
             type=sha
 
       - name: Build and push Docker image
+        id: build
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -58,6 +59,7 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: linux/amd64
 
+      # Attestation optional - can fail on some repos
       - name: Generate attestation
         if: github.event_name != 'pull_request'
         uses: actions/attest-build-provenance@v1
@@ -65,3 +67,4 @@ jobs:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           subject-digest: ${{ steps.build.outputs.digest }}
           push-to-registry: true
+        continue-on-error: true
