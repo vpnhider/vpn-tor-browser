@@ -10,6 +10,7 @@ USER root
 # Install WireGuard and dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     wireguard-tools \
+    openresolv \
     iproute2 \
     iptables \
     net-tools \
