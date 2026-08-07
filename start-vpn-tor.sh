@@ -38,4 +38,4 @@ ip rule show | grep -E '51820|fwmark'
 
 # Start Tor Browser (from base image)
 echo "[+] Starting Tor Browser (noVNC)..."
-exec /opt/tor-browser/start-tor-browser --no-vnc
+exec /app/Browser/start-tor-browser --no-vnc
