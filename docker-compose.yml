@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  vpn-tor-browser:
+    build: .
+    image: vpn-tor-browser:latest
+    container_name: vpn-tor-browser
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+      - CAP_DAC_OVERRIDE
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      - "5800:5800"
+    environment:
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
+      - WIREGUARD_PEER_PUBLIC_KEY=${WIREGUARD_PEER_PUBLIC_KEY}
+      - WIREGUARD_ENDPOINT=${WIREGUARD_ENDPOINT}
+      # SERVER_PUBLIC_IP is optional - auto-detected at runtime
+    volumes:
+      - tor-browser-data:/home/user/.tor-browser
+      - tor-browser-profile:/home/user/.tor-browser-profile
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5800/"]
+      interval: 30s
+      timeout: 10s
+      start_period: 60s
+      retries: 3
+
+volumes:
+  tor-browser-data:
+  tor-browser-profile:
