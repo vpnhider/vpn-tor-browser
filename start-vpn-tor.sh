@@ -1,7 +1,7 @@
 #!/bin/bash
 # start-vpn-tor.sh
 # Entry point for VPN -> Tor Browser container
-# Starts WireGuard, policy routing, then Tor Browser (noVNC)
+# Sets up WireGuard, then runs base image's init (starts nginx, VNC, Tor Browser)
 
 set -e
 
@@ -36,6 +36,6 @@ wg show
 ip route show table 51820
 ip rule show | grep -E '51820|fwmark'
 
-# Start Tor Browser (from base image)
-echo "[+] Starting Tor Browser (noVNC)..."
-exec /app/Browser/start-tor-browser --no-vnc
+# Start base image services (nginx on 5800, VNC, Tor Browser)
+echo "[+] Starting base services (nginx, VNC, Tor Browser)..."
+exec /init
